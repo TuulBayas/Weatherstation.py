@@ -1,0 +1,159 @@
+# weatherstation by Tuul Bayasgalan
+from datetime import datetime,date
+
+class DOBError(Exception):
+    pass
+#create class that stores information on location, temp, rain, etc...
+class weatherStation:
+
+	def __init__(self, location, temp,rain,wind_speed,wind_direction,air_quality,CO2,humidity):
+		self.location = location
+		self.temp = temp
+		self.temp_f=self.celsius2Fahrenheit(temp)
+		self.rain = rain
+		self.wind_speed = wind_speed
+		self.wind_direction = wind_direction
+		self.air_quality = air_quality
+		self.CO2 = CO2
+		self.humidity = humidity
+
+	@property
+	def temp(self):
+		return self._temp
+# use setters to set the property's value
+	@temp.setter
+	def temp(self,temp):
+		self._temp=temp
+
+	@property
+	def temp_f(self):
+		return self._temp_f
+# the setter helps us get a value for temperature in this function
+	@temp_f.setter
+	def temp_f(self,temp_f):
+		self._temp_f=temp_f
+		
+		
+
+	@property
+	def wind_speed(self):
+		return self._temp
+# use setter to get mph converted into kmh for wind speed
+	@wind_speed.setter
+	def wind_speed(self,wind_speed):
+		self._wind_speed=wind_speed
+		self._wind_speed_kmh = self.mph2kmh(wind_speed)
+		
+
+	@property
+	def air_quality(self):
+		return self._air_quality
+
+	@air_quality.setter
+	def air_quality(self,air_quality):
+		try:
+			self._air_quality=float(air_quality)
+		except ValueError:
+			raise DOBError('Wrong float format.')
+
+
+	@property
+	def CO2(self):
+		return self._CO2
+
+	@CO2.setter
+	def CO2(self,CO2):
+		self._CO2=CO2
+		
+	@property
+	def humidity(self):
+		return self._humidity
+
+	@humidity.setter
+	def humidity(self,humidity):
+		self._humidity=humidity
+# use this method to convert celsius to fahrenheit		
+	def celsius2Fahrenheit(self,n):
+		return int(n)*9/5+32
+# use this method to convert mph to kmh
+	def mph2kmh(self,n):
+		return round(int(n)*1.60934,0)
+# use is_integer to get a valid value, get a value that is an integer
+	def is_integer(n):
+		try:
+			float(n)
+		except ValueError:
+			return False
+		else:
+			return float(n).is_integer()
+	def __repr__(self):
+
+		return f"Lcation: {self.location}, temperature : {self.temp} °C | {self.temp_f} °F, rain : {self.rain} , wind speed : {self.wind_speed} mph | {self._wind_speed_kmh} kmh , wind direction : {self.wind_direction} , air quality : {self.air_quality} , CO2 : {self.CO2} , humidity : {self.humidity}"
+
+
+# code to ask the user to log in data for location,temp,rain,etc...
+ws_log=[]
+while True:
+	print ('Enter the information \n')
+	location = input("Location -> ")
+	while True:
+		try:
+			temp = input("temperature °C-> ")
+			int(temp)
+			break
+		except Exception as e:
+			print (e)
+
+
+	rain = input("rain -> ")
+	
+	while True:
+		try:
+			wind_speed = input("wind speed mph->")
+			int(wind_speed)
+			break
+		except Exception as e:
+			print (e)
+	
+	wind_direction = input("wind direction -> ")
+
+	while True:
+		try:
+			air_quality = input("air quality -> ")
+			float(air_quality)
+			break
+		except Exception as e:
+			print (e)
+	
+	while True:
+		try:
+			CO2 = input("CO2 -> ")
+			int(CO2)
+			break
+		except Exception as e:
+			print (e)
+
+	while True:
+		try:
+			humidity = input("humidity -> ")
+			int(humidity)
+			break
+		except Exception as e:
+			print (e)
+	
+	
+
+
+	ws_log.append(weatherStation(location, temp,rain,wind_speed,wind_direction,air_quality,CO2,humidity))
+# code to ask the user if they want to enter another weather information
+	answer = None
+	while answer not in ('y','n'):
+		answer = (input("Would you like to enter another weather information (y/n)? ")).lower()
+	if answer=='n':
+
+		
+		print("---------------------------------------")
+		for ws in ws_log:
+			print (ws)
+		break
+	
